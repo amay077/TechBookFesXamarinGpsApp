@@ -6,15 +6,15 @@ import android.os.Bundle;
 
 import com.amay077.gpsapp.App;
 import com.amay077.gpsapp.R;
-import com.amay077.gpsapp.databinding.ActivityLapBinding;
-import com.amay077.gpsapp.viewmodel.LapViewModel;
+import com.amay077.gpsapp.databinding.ActivityRecordBinding;
+import com.amay077.gpsapp.viewmodel.RecordViewModel;
 
 import javax.inject.Inject;
 
-public class LapActivity extends AppCompatActivity {
+public class RecordActivity extends AppCompatActivity {
 
     @Inject
-    /*private final*/ LapViewModel _viewModel;
+    /*private final*/ RecordViewModel _viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,13 +24,7 @@ public class LapActivity extends AppCompatActivity {
         final App app = (App) getApplication();
         app.getApplicationComponent().inject(this);
 
-        ActivityLapBinding binding =  DataBindingUtil.setContentView(this, R.layout.activity_lap);
+        ActivityRecordBinding binding =  DataBindingUtil.setContentView(this, R.layout.activity_record);
         binding.setViewModel(_viewModel);
-    }
-
-    @Override
-    protected void onDestroy() {
-        _viewModel.dispose();
-        super.onDestroy();
     }
 }

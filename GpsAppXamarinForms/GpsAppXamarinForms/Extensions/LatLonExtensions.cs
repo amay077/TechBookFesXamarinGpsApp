@@ -15,7 +15,7 @@ namespace GpsAppXamarinForms.Extensions
 
                 var seconds = (tmp - minutes) * 60;
 
-                return $"{degree}度{minutes}分{seconds:0.000}秒";
+                return $"{degree}度{minutes:00}分{seconds:0.000}秒";
             }
             else
             {

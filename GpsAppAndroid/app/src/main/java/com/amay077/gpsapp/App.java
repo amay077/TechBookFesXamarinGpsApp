@@ -5,7 +5,6 @@ import android.app.Application;
 import com.amay077.gpsapp.di.AppComponent;
 import com.amay077.gpsapp.di.AppModule;
 import com.amay077.gpsapp.di.DaggerAppComponent;
-import com.amay077.gpsapp.models.StopWatchModel;
 
 public class App extends Application {
 
@@ -25,17 +24,5 @@ public class App extends Application {
 
     public AppComponent getApplicationComponent() {
         return applicationComponent;
-    }
-
-    private final StopWatchModel _stopWatch = new StopWatchModel();
-
-    public StopWatchModel getStopWatch() {
-        return _stopWatch;
-    }
-
-    @Override
-    public void onTerminate() {
-        _stopWatch.unsubscribe();
-        super.onTerminate();
     }
 }

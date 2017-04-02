@@ -1,102 +1,115 @@
 package com.amay077.gpsapp.viewmodel;
 
-import android.content.Context;
+import android.location.Location;
+import android.text.format.DateFormat;
 
-import com.amay077.gpsapp.App;
 import com.amay077.gpsapp.frameworks.messengers.Messenger;
 import com.amay077.gpsapp.frameworks.messengers.ShowToastMessages;
 import com.amay077.gpsapp.frameworks.messengers.StartActivityMessage;
-import com.amay077.gpsapp.models.StopWatchModel;
-import com.amay077.gpsapp.views.activities.LapActivity;
+import com.amay077.gpsapp.usecases.LocationUseCase;
+import com.amay077.gpsapp.util.LatLonUtil;
+import com.amay077.gpsapp.views.activities.RecordActivity;
+import com.annimon.stream.Optional;
 
-import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.Observable;
+import io.reactivex.subjects.BehaviorSubject;
 import jp.keita.kagurazaka.rxproperty.Nothing;
 import jp.keita.kagurazaka.rxproperty.ReadOnlyRxProperty;
 import jp.keita.kagurazaka.rxproperty.RxCommand;
 import jp.keita.kagurazaka.rxproperty.RxProperty;
 
-public class MainViewModel implements Disposable {
+public class MainViewModel {
 
     // 簡易Messenger(EventBus のようなもの)
     public final Messenger messenger = new Messenger();
 
-    private final CompositeDisposable _subscriptions = new CompositeDisposable();
-
     // ■ViewModel として公開するプロパティ
-
-    /** タイマー時間 */
+    /// 緯度、経度、時刻
+    public final ReadOnlyRxProperty<String> formattedLatitude;
+    public final ReadOnlyRxProperty<String> formattedLongitude;
     public final ReadOnlyRxProperty<String> formattedTime;
-    /** 実行中かどうか？ */
+    /// 実行中かどうか？
     public final ReadOnlyRxProperty<Boolean> isRunning;
-    /** 経過時間群 */
-    public final ReadOnlyRxProperty<List<String>> formattedLaps;
-    /** ミリ秒を表示するか？ */
-    public final RxProperty<Boolean> isVisibleMillis;
+    /// 度分秒表示か？
+    public final RxProperty<Boolean> isDmsFormat = new RxProperty<>(false);
+    /// 記録した数
+    public final ReadOnlyRxProperty<Integer> recordCount;
 
+    // View向けに公開するコマンド
+
+    /// 開始 or 終了
     public final RxCommand<Nothing> startOrStopCommand;
-    public final RxCommand<Nothing> lapCommand;
-    public final RxCommand<Nothing> toggleVisibleMillisCommand;
+    /// 緯度経度の記録
+    public final RxCommand<Nothing> recordCommand;
+    /// 度分秒表示かのトグル
+    public final RxCommand<Nothing> toggleIsDmsFormatCommand;
 
     // コンストラクタ
     @Inject
-    public MainViewModel(StopWatchModel stopWatch) {
+    public MainViewModel(LocationUseCase locationUseCase) {
 
-        // StopWatchModel のプロパティをそのまま公開してるだけ
-        isRunning = new ReadOnlyRxProperty<>(stopWatch.isRunning);
-        formattedLaps = new ReadOnlyRxProperty<>(stopWatch.formattedLaps);
+        // ■プロパティの実装
+        // LocationUseCase の各プロパティを必要なら加工して公開
+        isRunning = new ReadOnlyRxProperty<>(locationUseCase.isRunning);
 
-        isVisibleMillis = new RxProperty<>(stopWatch.isVisibleMillis);
+        // Location の時刻をフォーマットして公開
+        formattedTime = new ReadOnlyRxProperty<String>(locationUseCase.location
+                .map(l -> DateFormat.format("kk:mm:ss", l.getTime()).toString()));
 
-        // フォーマットされた時間を表す Observable（time と timeFormat のどちらかが変更されたら更新）
-        // 表示用にthrottleで10ms毎に間引き。View側でやってもよいかも。
-        formattedTime = new ReadOnlyRxProperty<>(stopWatch.formattedTime);
+        // Location の緯度を度分秒または度にフォーマットして公開
+        formattedLatitude = new ReadOnlyRxProperty<>(Observable.combineLatest(isDmsFormat, locationUseCase.location,
+                (isDms, l) -> LatLonUtil.formatDegrees(l.getLatitude(), isDms)));
 
-        // STOP されたら、最速／最遅ラップを表示して、LapActivity へ遷移
-        _subscriptions.add(
-                stopWatch.isRunning.filter(isRunning -> {
-                    return !isRunning;
-                })
-                .subscribe(notUse -> {
+        // Location の経度を度分秒または度にフォーマットして公開
+        formattedLongitude = new ReadOnlyRxProperty<>(Observable.combineLatest(isDmsFormat, locationUseCase.location,
+                (isDms, l) -> LatLonUtil.formatDegrees(l.getLongitude(), isDms)));
+
+        // 記録されたレコード群を件数として公開
+        recordCount = new ReadOnlyRxProperty<>(locationUseCase.records
+                .map(r -> r.size()));
+
+        //// STOP されたら、最も精度のよい位置情報を表示して、RecordsPage へ遷移
+        isRunning
+                .buffer(2, 1)
+                .filter(x -> x.get(0) && !x.get(1))
+                .subscribe(dummy -> {
+                        // 最も精度のよい緯度経度を得る
+                        //  返値がメソッドは、その時点の情報でしかない(Reactiveではない)ので注意すること
+                    final Optional<Location> bestLocation = locationUseCase.getBestLocation();
+
+                    final String message = bestLocation.isPresent() ?
+                            LatLonUtil.formatLocation(bestLocation.get(), isDmsFormat.get()) :
+                            "記録されてません";
+
                     // Toast を表示させる
-                    messenger.send(new ShowToastMessages(
-                            "最速ラップ:" + stopWatch.getFormattedFastestLap() +
-                            ", 最遅ラップ:" + stopWatch.getFormattedWorstLap()));
+                    messenger.send(new ShowToastMessages(message));
 
-                    // LapActivity へ遷移させる
-                    messenger.send(new StartActivityMessage(LapActivity.class)); // ホントは LapViewModel を指定して画面遷移すべき
-                }));
+                    // RecordActivity へ遷移させる
+                    messenger.send(new StartActivityMessage(RecordActivity.class)); // ホントは RecordViewModel を指定して画面遷移すべき
 
-        /** 開始 or 終了 */
-        startOrStopCommand = new RxCommand<>();
-        startOrStopCommand.subscribe(n -> {
-            stopWatch.startOrStop();
         });
 
-        /** 経過時間の記録 */
-        lapCommand = new RxCommand<>(isRunning);
-        lapCommand.subscribe(it -> {
-            stopWatch.lap();
+        // ■コマンドの実装
+        // 開始 or 終了
+        startOrStopCommand = new RxCommand<>(); // いつでも実行可能
+        startOrStopCommand.subscribe(dummy -> {
+            locationUseCase.startOrStop();
         });
 
-        /** ミリ秒以下表示の切り替え */
-        toggleVisibleMillisCommand = new RxCommand<>();
-        toggleVisibleMillisCommand.subscribe(it -> {
-            stopWatch.toggleVisibleMillis();
+        // 位置情報の記録
+        recordCommand = new RxCommand<>(isRunning); // 実行中のみ記録可能
+        recordCommand.subscribe(dummy -> {
+            locationUseCase.record();
         });
-    }
 
-    @Override
-    public void dispose() {
-        _subscriptions.dispose();
-    }
+        // 度分秒表示かのトグル
+        toggleIsDmsFormatCommand = new RxCommand<>(); // いつでも実行可能
+        toggleIsDmsFormatCommand.subscribe(dummy -> {
+            isDmsFormat.set(!isDmsFormat.get());
+        });
 
-    @Override
-    public boolean isDisposed() {
-        return _subscriptions.isDisposed();
     }
 }

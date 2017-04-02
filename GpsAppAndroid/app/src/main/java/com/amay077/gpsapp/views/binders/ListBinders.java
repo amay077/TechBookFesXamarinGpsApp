@@ -18,10 +18,10 @@ public class ListBinders {
     /**
      * ListView と ViewModel のカスタムバインディング
      *
-     * TODO 本当は viewModel.formattedLaps とバインドしたい
+     * TODO 本当は viewModel.formattedRecords とバインドしたい
      */
     @BindingAdapter("stringListExProp")
-    public static void setFormattedLaps(ListView listView, final ReadOnlyRxProperty<List<String>> listProperty) {
+    public static void setFormattedRecords(ListView listView, final ReadOnlyRxProperty<List<String>> listProperty) {
         final ArrayAdapter<String> adapter = new ArrayAdapter(
                 listView.getContext(), android.R.layout.simple_list_item_1);
         listView.setAdapter(adapter);

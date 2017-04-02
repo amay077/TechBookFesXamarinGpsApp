@@ -1,8 +1,5 @@
 package com.amay077.gpsapp.frameworks.messengers;
 
-/**
- * Created by hrnv on 2015/12/20.
- */
 public class ShowToastMessages implements Message {
     public final String text;
 

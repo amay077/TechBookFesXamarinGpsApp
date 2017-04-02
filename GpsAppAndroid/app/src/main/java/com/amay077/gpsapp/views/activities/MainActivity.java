@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Inject
     /*private final*/ MainViewModel _viewModel;
-    private final CompositeDisposable _subscriptions = new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,28 +38,18 @@ public class MainActivity extends AppCompatActivity {
         // ■ViewModel からの Message の受信
 
         // 画面遷移のメッセージ受信
-        _subscriptions.add(
-                _viewModel.messenger.register(StartActivityMessage.class)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(m -> {
-                                Intent intent = new Intent(MainActivity.this, m.activityClass);
-                                MainActivity.this.startActivity(intent);
-                        }));
+        _viewModel.messenger.register(StartActivityMessage.class)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(m -> {
+                        Intent intent = new Intent(MainActivity.this, m.activityClass);
+                        MainActivity.this.startActivity(intent);
+                });
 
         // トースト表示のメッセージ受信
-        _subscriptions.add(
-                _viewModel.messenger.register(ShowToastMessages.class)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(m -> {
-                            Toast.makeText(MainActivity.this, m.text, Toast.LENGTH_LONG).show();
-                        })
-        );
-    }
-
-    @Override
-    protected void onDestroy() {
-        _subscriptions.clear();
-        _viewModel.dispose();
-        super.onDestroy();
+        _viewModel.messenger.register(ShowToastMessages.class)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(m -> {
+                    Toast.makeText(MainActivity.this, m.text, Toast.LENGTH_LONG).show();
+                });
     }
 }

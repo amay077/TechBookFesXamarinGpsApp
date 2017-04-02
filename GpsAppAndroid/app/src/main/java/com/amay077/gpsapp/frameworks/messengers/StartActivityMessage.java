@@ -1,11 +1,11 @@
 package com.amay077.gpsapp.frameworks.messengers;
 
-import com.amay077.gpsapp.views.activities.LapActivity;
+import com.amay077.gpsapp.views.activities.RecordActivity;
 
 public class StartActivityMessage implements Message {
-    public final Class<LapActivity> activityClass;
+    public final Class<RecordActivity> activityClass;
 
-    public StartActivityMessage(Class<LapActivity> activityClass) {
+    public StartActivityMessage(Class<RecordActivity> activityClass) {
         this.activityClass = activityClass;
     }
 }
