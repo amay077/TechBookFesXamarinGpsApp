@@ -1,4 +1,4 @@
-package com.amay077.gpsapp.frameworks.messengers;
+package com.amay077.gpsapp.messengers;
 
 public class ShowToastMessages implements Message {
     public final String text;

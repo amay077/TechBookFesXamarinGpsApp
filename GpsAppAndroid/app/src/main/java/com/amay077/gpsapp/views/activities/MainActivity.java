@@ -10,8 +10,8 @@ import com.amay077.gpsapp.App;
 import com.amay077.gpsapp.R;
 import com.amay077.gpsapp.databinding.ActivityMainBinding;
 import com.amay077.gpsapp.di.ActivityModule;
-import com.amay077.gpsapp.frameworks.messengers.ShowToastMessages;
-import com.amay077.gpsapp.frameworks.messengers.StartActivityMessage;
+import com.amay077.gpsapp.messengers.ShowToastMessages;
+import com.amay077.gpsapp.messengers.StartActivityMessage;
 import com.amay077.gpsapp.viewmodel.MainViewModel;
 
 import javax.inject.Inject;

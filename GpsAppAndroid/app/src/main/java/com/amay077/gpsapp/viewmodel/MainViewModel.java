@@ -3,9 +3,9 @@ package com.amay077.gpsapp.viewmodel;
 import android.location.Location;
 import android.text.format.DateFormat;
 
-import com.amay077.gpsapp.frameworks.messengers.Messenger;
-import com.amay077.gpsapp.frameworks.messengers.ShowToastMessages;
-import com.amay077.gpsapp.frameworks.messengers.StartActivityMessage;
+import com.amay077.gpsapp.messengers.Messenger;
+import com.amay077.gpsapp.messengers.ShowToastMessages;
+import com.amay077.gpsapp.messengers.StartActivityMessage;
 import com.amay077.gpsapp.usecases.LocationUseCase;
 import com.amay077.gpsapp.util.LatLonUtil;
 import com.amay077.gpsapp.views.activities.RecordActivity;

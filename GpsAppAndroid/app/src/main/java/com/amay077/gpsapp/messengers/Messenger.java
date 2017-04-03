@@ -1,4 +1,4 @@
-package com.amay077.gpsapp.frameworks.messengers;
+package com.amay077.gpsapp.messengers;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
