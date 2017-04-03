@@ -2,8 +2,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using Reactive.Bindings;
 using GpsAppXamarinForms.Api;
 using GpsAppXamarinForms.Api.DataModels;
 

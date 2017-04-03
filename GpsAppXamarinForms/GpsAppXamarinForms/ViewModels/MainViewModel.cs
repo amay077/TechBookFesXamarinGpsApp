@@ -1,23 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Prism.Navigation;
 using Prism.Services;
 using Reactive.Bindings;
-using Reactive.Bindings.Extensions;
-using GpsAppXamarinForms.Api.DataModels;
 using GpsAppXamarinForms.Extensions;
-using GpsAppXamarinForms.Models;
 using GpsAppXamarinForms.UseCases;
 
 namespace GpsAppXamarinForms.ViewModels
 {
-    public class MainViewModel : IDisposable
+    public class MainViewModel
     {
-        readonly CompositeDisposable _subscriptions = new CompositeDisposable();
-
         // View向けに公開する変更通知プロパティ
 
         /// <summary> 緯度、経度、時刻 </summary>
@@ -88,8 +80,7 @@ namespace GpsAppXamarinForms.ViewModels
 
                     // RecordPage へ遷移させる    
                     await navigationService.NavigateAsync("RecordsPage");
-                })
-                .AddTo(_subscriptions);
+                });
 
 
             // ■コマンドの実装
@@ -98,25 +89,14 @@ namespace GpsAppXamarinForms.ViewModels
             StartOrStopCommand.Subscribe(_ =>
                 {
                     locationUseCase.StartOrStop();
-                })
-                .AddTo(_subscriptions);
+                });
 
             // 位置情報の記録
             RecordCommand = IsRunning.ToReactiveCommand(); // 実行中のみ記録可能
             RecordCommand.Subscribe(_ =>
                 {
                     locationUseCase.Record();
-                })
-                .AddTo(_subscriptions);
+                });
         }
-
-        #region IDisposable implementation
-
-        public void Dispose ()
-        {
-            _subscriptions.Dispose();
-        }
-
-        #endregion
     }
 }

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Reactive.Subjects;
 using Android.Content;
 using Android.Locations;
 using Android.OS;
 using GpsAppXamarinForms.Api;
-using GpsAppXamarinForms.Api.DataModels;
 using ALocation = Android.Locations.Location;
 using Location = GpsAppXamarinForms.Api.DataModels.Location;
 

@@ -2,7 +2,6 @@
 using Microsoft.Practices.Unity;
 using Prism.Mvvm;
 using Prism.Unity;
-using GpsAppXamarinForms.Models;
 using GpsAppXamarinForms.UseCases;
 using GpsAppXamarinForms.Views;
 using Xamarin.Forms;
@@ -22,7 +21,6 @@ namespace GpsAppXamarinForms
 
         protected override void RegisterTypes()
         {
-            Container.RegisterType<IStopWatchModel, StopWatchModel>(new ContainerControlledLifetimeManager());
             Container.RegisterType<LocationUseCase, LocationUseCase>(new ContainerControlledLifetimeManager());
 
             Container.RegisterTypeForNavigation<NavigationPage>();
