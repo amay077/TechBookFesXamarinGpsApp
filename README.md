@@ -1,14 +1,12 @@
-# TechBookFesXamarinGpsApp
-
+# 「Xamarin.Android で始めるクロスプラットモバイルアプリ開発」のサンプル「GPSアプリ」
 ![screenshot01](screenshot_01.png)
 
 ## これは何？
 
-これは Xamarintans（ざまりたんず） が執筆した「Essential Xamarin Yang (陽)」という技術同人誌の、
-第1章「Xamarin.Android で始めるクロスプラットモバイルアプリ開発」 − 「1.8  Xamarinによる「クロスプラットフォーム」MVVM+Rxアプリケーション」 で登場する「GPSアプリケーション」を Android ネイティブと Xamarin(Xamarin.Forms) で実装したリポジトリです。
+これは [Xamarintans（ざまりたんず） が執筆した「Essential Xamarin Yang (陽)」](https://atsushieno.github.io/xamaritans/tbf2.html)という技術同人誌の、
+第1章「Xamarin.Android で始めるクロスプラットモバイルアプリ開発」 − 1.8節「Xamarinによる「クロスプラットフォーム」MVVM+Rxアプリケーション」 で登場する「GPSアプリケーション」を Android ネイティブと Xamarin(Xamarin.Forms) で実装したソースコードです。
 
 書籍での解説の通り、Rx(RxJava や RxSwift) と MVVM、データバインディングを利用して開発されたモバイルアプリが、Xamarin(Xamarin.Forms) でどのように共通化できるかを示したリポジトリです。
-
 
 
 ## ディレクトリ構成
@@ -19,10 +17,10 @@ Android ネイティブ(Java)で実装したプロジェクトです。Android S
 
 #### 主な使用技術
 * Data Binding - Android Data Binding
-* Rx - RxJava 2.0
-* ViewModel - RxProperty
-* Dependency Injection - Dagger2
-* Others - Lightweight-Stream-API, RetroLambda
+* Rx - [RxJava 2.0](https://github.com/ReactiveX/RxJava)
+* ViewModel - [RxProperty](https://github.com/k-kagurazaka/rx-property-android)
+* Dependency Injection - [Dagger2](https://github.com/google/dagger)
+* Others - [Lightweight-Stream-API](https://github.com/aNNiMON/Lightweight-Stream-API), [RetroLambda](https://github.com/evant/gradle-retrolambda)
 
 ### /GpsAppXamarinForms
 
@@ -31,9 +29,15 @@ Xamarin.Forms(C#)で実装したプロジェクトです。Visual Studio for Mac
 
 #### 主な使用技術
 * Data Binding - Xamarin.Forms Data Binding
-* Rx - Reactive Extensions
-* ViewModel - ReactiveProperty, Prism for Xamarin.Forms
-* Dependency Injection - Unity(Prism.Unity)
+* Rx - [Reactive Extensions](https://github.com/Reactive-Extensions/Rx.NET)
+* ViewModel - [ReactiveProperty](https://github.com/runceel/ReactiveProperty), [Prism for Xamarin.Forms](https://www.nuget.org/packages/Prism.Forms/)
+* Dependency Injection - [Unity(Prism.Unity)](https://www.nuget.org/packages/Prism.Unity/)
 
 ## ブランチについて
-master ブランチは、最新のソースコードを示しています。書籍に対応するソースコードは、書籍の版に対応した tag を付与しています。
+master ブランチは、最新のソースコードを示しています。
+書籍に対応するソースコードは、次のように書籍の版に対応した tag を付与しています。
+
+* 2017年4月9日発行(Edition v1.0.0) - [v20170409](../../tree/v20170409)
+
+## ライセンス
+このリポジトリのライセンスは [LICENSE](LICENSE) に従います。
