@@ -3,11 +3,18 @@
 
 ## これは何？
 
-これは [Xamarintans（ざまりたんず） が執筆した「Essential Xamarin Yang (陽)」](https://atsushieno.github.io/xamaritans/tbf2.html)という技術同人誌の、
+これは [Xamarintans（ざまりたんず） が執筆した **「Essential Xamarin Yang (陽)」** ](https://atsushieno.github.io/xamaritans/tbf2.html)という技術同人誌の、
 第1章「Xamarin.Android で始めるクロスプラットモバイルアプリ開発」 − 1.8節「Xamarinによる「クロスプラットフォーム」MVVM+Rxアプリケーション」 で登場する「GPSアプリケーション」を Android ネイティブと Xamarin(Xamarin.Forms) で実装したソースコードです。
 
 書籍での解説の通り、Rx(RxJava や RxSwift) と MVVM、データバインディングを利用して開発されたモバイルアプリが、Xamarin(Xamarin.Forms) でどのように共通化できるかを示したリポジトリです。
 
+## アプリの機能
+
+* 端末のGPSから取得した位置情報を表示し続ける
+* 緯度経度の表記を「度(34.5°)」と「度分秒(34度30分00秒)」で切り替える
+* RECORDボタンを押した時点の緯度経度を記録する
+* 記録した緯度経度群で最も位置精度の高いものを表示する
+* 記録した緯度経度群を一覧で表示する
 
 ## ディレクトリ構成
 
